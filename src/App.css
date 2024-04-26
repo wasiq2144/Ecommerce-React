@@ -77,3 +77,18 @@
 .product-discount {
   margin-bottom: 6px;
 }
+
+.ReactModal__Content--after-open {
+  background: #242424 !important;
+}
+
+form{
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+
+.product-details {
+  color: #fff;
+}

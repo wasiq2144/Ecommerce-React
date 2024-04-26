@@ -1,9 +1,7 @@
-// AddProductModal.jsx
-
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { collection, addDoc } from 'firebase/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Import storage functions
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import db from '../firebase';
 
 const AddProductModal = ({ isOpen, onRequestClose }) => {
@@ -13,9 +11,9 @@ const AddProductModal = ({ isOpen, onRequestClose }) => {
     quantity: '',
     description: '',
     discount: '',
-    imageUrl: '' // Store the URL of the uploaded image
+    imageUrl: ''
   });
-  const [imageFile, setImageFile] = useState(null); // Store the selected image file
+  const [imageFile, setImageFile] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -36,18 +34,14 @@ const AddProductModal = ({ isOpen, onRequestClose }) => {
     try {
       const productsCollectionRef = collection(db, 'products');
 
-      // Upload image to Firebase Storage
       const storage = getStorage();
       const storageRef = ref(storage, `product_images/${imageFile.name}`);
       await uploadBytes(storageRef, imageFile);
 
-      // Get download URL of the uploaded image
       const imageUrl = await getDownloadURL(storageRef);
 
-      // Add product data to Firestore collection
       await addDoc(productsCollectionRef, { ...product, imageUrl });
 
-      // Clear form fields after submission
       setProduct({
         name: '',
         price: '',
@@ -58,7 +52,6 @@ const AddProductModal = ({ isOpen, onRequestClose }) => {
       });
       setImageFile(null);
 
-      // Close the modal
       onRequestClose();
       console.log('Product added successfully!');
     } catch (error) {
@@ -79,7 +72,10 @@ const AddProductModal = ({ isOpen, onRequestClose }) => {
         <input type="number" name="quantity" value={product.quantity} onChange={handleInputChange} placeholder="Quantity" required />
         <textarea name="description" value={product.description} onChange={handleInputChange} placeholder="Description" required />
         <input type="number" name="discount" value={product.discount} onChange={handleInputChange} placeholder="Discount" />
-        <input type="file" accept="image/*" onChange={handleImageChange} required /> {/* Image upload input */}
+        <div>
+        <label htmlFor="addImage">Upload Image</label>
+        <input type="file" accept="image/*" id='addImage' onChange={handleImageChange} required />
+        </div>
         <button type="submit">Add Product</button>
       </form>
     </Modal>

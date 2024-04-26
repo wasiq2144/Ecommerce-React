@@ -1,8 +1,6 @@
-// ProductList.jsx
-
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
-import db from '../firebase'; // Import the Firestore instance correctly
+import db from '../firebase';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -10,21 +8,21 @@ const ProductList = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const productsCollectionRef = collection(db, 'products'); // Create a reference to the 'products' collection
-        const querySnapshot = await getDocs(productsCollectionRef); // Fetch the documents from the collection
+        const productsCollectionRef = collection(db, 'products');
+        const querySnapshot = await getDocs(productsCollectionRef);
 
         const fetchedProducts = [];
         querySnapshot.forEach((doc) => {
-          fetchedProducts.push({ id: doc.id, ...doc.data() }); // Extract document data and add to array
+          fetchedProducts.push({ id: doc.id, ...doc.data() });
         });
 
-        setProducts(fetchedProducts); // Update state with fetched products
+        setProducts(fetchedProducts);
       } catch (error) {
         console.error('Error fetching products:', error);
       }
     };
 
-    fetchProducts(); // Fetch products when component mounts
+    fetchProducts();
   }, [products]);
 
   return (
